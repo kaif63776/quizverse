@@ -34,7 +34,8 @@ An interactive, high-performance coding assessment web application built with Ja
 ```bash
 git clone [https://github.com/mohdkaif/quizbackend.git](https://github.com/mohdkaif/quizbackend.git)
 cd quizbackend
-2. MySQL Database Setup
+ 
+ 2. MySQL Database Setup
 Open MySQL command-line client or MySQL Workbench:
 
 Bash
@@ -69,6 +70,8 @@ CREATE TABLE IF NOT EXISTS questions (
     category VARCHAR(100) NOT NULL,
     difficulty VARCHAR(20) DEFAULT 'Easy'
 );
+
+
 3. Database Credentials Configuration
 Open src/main/java/com/kaif/quizbackend/util/DBConnection.java and verify your local MySQL credentials:
 
@@ -78,6 +81,9 @@ Java
 private static final String URL = "jdbc:mysql://localhost:3306/quiz_app?useSSL=false&allowPublicKeyRetrieval=true";
 private static final String USER = "root";
 private static final String PASSWORD = "your_mysql_password"; // Replace with your MySQL root password
+
+
+
 4. Build and Launch Server
 Start the embedded Jetty server using Maven wrapper:
 
@@ -93,6 +99,9 @@ DOS
 
 
 mvnw.cmd clean compile && mvnw.cmd org.eclipse.jetty:jetty-maven-plugin:run
+
+
+
 5. Access the Web App
 Open any browser and navigate to:
 
@@ -117,5 +126,6 @@ quizbackend/
 ├── pom.xml                      # Maven build file & Jetty plugin configuration
 ├── README.md                    # Project documentation
 └── .gitignore                   # Ignored files (target, .class, IDE configs)
+
 👤 Author
 Developer: Mohd Kaif
