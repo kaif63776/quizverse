@@ -1,20 +1,3 @@
-Terminal ke andar code block ke andar code blocks hone ki wajah se confuse ho raha hai. Terminal ka jhanjhat hi chhod do, **VS Code mein direct paste** karo, ye sabse simple aur 100% safe tarika hai:
-
----
-
-### Step 1: VS Code mein `README.md` file kholo
-
-1. VS Code ke left side mein files ki list dikhegi.
-2. Wahan **`README.md`** par click karke use open kar lo.
-3. File ke andar jo kuch bhi pehle se likha hai, use **`Cmd + A`** karke select karo aur **Delete (Backspace)** daba kar poora khaali kar do.
-
----
-
-### Step 2: Neeche wale box se poora text copy karo
-
-Is box ke **top-right corner** par copy button hoga, uspe click karke copy kar lo:
-
-```markdown
 # ⚡ QuizVerse — Speed Evaluation Platform
 
 An interactive, high-performance coding assessment web application built with Java, Maven, MySQL, and vanilla web standards (HTML5/CSS3/ES6+). Features 4 domains, difficulty-based countdown timers, zero-latency Web Audio sound synthesis, anti-tamper answer locking, and detailed post-quiz performance breakdowns.
@@ -51,21 +34,18 @@ An interactive, high-performance coding assessment web application built with Ja
 ```bash
 git clone [https://github.com/mohdkaif/quizbackend.git](https://github.com/mohdkaif/quizbackend.git)
 cd quizbackend
-
-```
-
-### 2. MySQL Database Setup
-
+2. MySQL Database Setup
 Open MySQL command-line client or MySQL Workbench:
 
-```bash
+Bash
+
+
 mysql -u root -p
-
-```
-
 Create the database and schema:
 
-```sql
+SQL
+
+
 CREATE DATABASE IF NOT EXISTS quiz_app;
 USE quiz_app;
 
@@ -89,52 +69,41 @@ CREATE TABLE IF NOT EXISTS questions (
     category VARCHAR(100) NOT NULL,
     difficulty VARCHAR(20) DEFAULT 'Easy'
 );
+3. Database Credentials Configuration
+Open src/main/java/com/kaif/quizbackend/util/DBConnection.java and verify your local MySQL credentials:
 
-```
+Java
 
-### 3. Database Credentials Configuration
 
-Open `src/main/java/com/kaif/quizbackend/util/DBConnection.java` and verify your local MySQL credentials:
-
-```java
 private static final String URL = "jdbc:mysql://localhost:3306/quiz_app?useSSL=false&allowPublicKeyRetrieval=true";
 private static final String USER = "root";
-private static final String PASSWORD = "your_mysql_password";
-
-```
-
-### 4. Build and Launch Server
-
+private static final String PASSWORD = "your_mysql_password"; // Replace with your MySQL root password
+4. Build and Launch Server
 Start the embedded Jetty server using Maven wrapper:
 
-**On macOS / Linux:**
+On macOS / Linux:
 
-```bash
+Bash
+
+
 ./mvnw clean compile && ./mvnw org.eclipse.jetty:jetty-maven-plugin:run
+On Windows:
 
-```
+DOS
 
-**On Windows:**
 
-```cmd
 mvnw.cmd clean compile && mvnw.cmd org.eclipse.jetty:jetty-maven-plugin:run
-
-```
-
-### 5. Access the Web App
-
+5. Access the Web App
 Open any browser and navigate to:
 
-```text
+Plaintext
+
+
 http://localhost:8080/index.html
+📂 Project Directory Structure
+Plaintext
 
-```
 
----
-
-## 📂 Project Directory Structure
-
-```text
 quizbackend/
 ├── src/
 │   ├── main/
@@ -148,11 +117,5 @@ quizbackend/
 ├── pom.xml                      # Maven build file & Jetty plugin configuration
 ├── README.md                    # Project documentation
 └── .gitignore                   # Ignored files (target, .class, IDE configs)
-
-```
-
----
-
-## 👤 Author
-
-* **Developer:** Mohd Kaif
+👤 Author
+Developer: Mohd Kaif
