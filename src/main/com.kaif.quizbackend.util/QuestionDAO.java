@@ -27,6 +27,14 @@ public class QuestionDAO {
                 q.setOption4(rs.getString("option4"));
                 q.setRightAnswer(String.valueOf(rs.getInt("correct_answer")));
                 q.setCategory(rs.getString("category"));
+                
+                String diff = "Easy";
+                try {
+                    diff = rs.getString("difficulty");
+                    if (diff == null || diff.trim().isEmpty()) diff = "Easy";
+                } catch (Exception ignored) {}
+                q.setDifficulty(diff);
+
                 questions.add(q);
             }
         } catch (SQLException e) {
@@ -36,7 +44,7 @@ public class QuestionDAO {
     }
 
     public boolean addQuestion(Question q) {
-        String sql = "INSERT INTO questions (question_text, option1, option2, option3, option4, correct_answer, category) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO questions (question_text, option1, option2, option3, option4, correct_answer, category, difficulty) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, q.getQuestionTitle());
@@ -46,6 +54,7 @@ public class QuestionDAO {
             ps.setString(5, q.getOption4());
             ps.setInt(6, Integer.parseInt(q.getRightAnswer()));
             ps.setString(7, q.getCategory());
+            ps.setString(8, q.getDifficulty() != null ? q.getDifficulty() : "Easy");
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,7 +63,7 @@ public class QuestionDAO {
     }
 
     public boolean updateQuestion(Question q) {
-        String sql = "UPDATE questions SET question_text = ?, option1 = ?, option2 = ?, option3 = ?, option4 = ?, correct_answer = ?, category = ? WHERE id = ?";
+        String sql = "UPDATE questions SET question_text = ?, option1 = ?, option2 = ?, option3 = ?, option4 = ?, correct_answer = ?, category = ?, difficulty = ? WHERE id = ?";
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
             ps.setString(1, q.getQuestionTitle());
@@ -64,7 +73,8 @@ public class QuestionDAO {
             ps.setString(5, q.getOption4());
             ps.setInt(6, Integer.parseInt(q.getRightAnswer()));
             ps.setString(7, q.getCategory());
-            ps.setLong(8, q.getId());
+            ps.setString(8, q.getDifficulty() != null ? q.getDifficulty() : "Easy");
+            ps.setLong(9, q.getId());
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
