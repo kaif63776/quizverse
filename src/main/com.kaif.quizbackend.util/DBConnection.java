@@ -5,24 +5,62 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DBConnection {
-    // Database credentials - update with your MySQL username and password
-    private static final String URL = "jdbc:mysql://localhost:3306/quiz_app";
-    private static final String USER = "root";
-    private static final String PASSWORD = "12345678"; 
-
+    
     public static Connection getConnection() {
-        Connection connection = null;
+        Connection conn = null;
         try {
-            // Load MySQL JDBC Driver
+            // MySQL JDBC Driver load karo
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
+            // Render / Cloud ke environment variables check karo
+            String host = System.getenv("DB_HOST");
+            String port = System.getenv("DB_PORT");
+            String dbName = System.getenv("DB_NAME");
+            String user = System.getenv("DB_USER");
+            String password = System.getenv("DB_PASSWORD");
+
+            String url;
+
+            // Agar cloud environment variables set hain (Render par chalega toh ye chalega)
+            if (host != null && !host.isEmpty()) {
+                if (port == null || port.isEmpty()) {
+                    port = "15523"; // Aiven default port
+                }
+                if (dbName == null || dbName.isEmpty()) {
+                    dbName = "defaultdb"; // Aiven ka default database naam
+                }
+                
+                // Aiven SSL secure connection URL
+                url = "jdbc:mysql://" + host + ":" + port + "/" + dbName + "?useSSL=true&requireSSL=true&verifyServerCertificate=false";
+                
+                System.out.println("Connecting to Aiven Cloud Database...");
+            } else {
+                // Localhost (Jab apne laptop par chalaoge)
+                String localHost = "localhost";
+                String localPort = "3306";
+                String localDb = "quiz_app"; // <-- YAHAN APNE LOCAL DATABASE KA NAAM LIKHNA (jaise quiz_app ya jo bhi ho)
+                String localUser = "root";
+                String localPass = "12345678"; // <-- YAHAN APNA LOCAL PASSWORD LIKHNA
+
+                url = "jdbc:mysql://" + localHost + ":" + localPort + "/" + localDb + "?useSSL=false&serverTimezone=UTC";
+                user = localUser;
+                password = localPass;
+                
+                System.out.println("Connecting to Local Database...");
+            }
+
+            // Connection establish karo
+            conn = DriverManager.getConnection(url, user, password);
+            System.out.println("Database Connected Successfully!");
+
         } catch (ClassNotFoundException e) {
-            System.out.println("MySQL JDBC Driver not found!");
+            System.err.println("MySQL JDBC Driver not found!");
             e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println("Failed to connect to the database!");
+            System.err.println("Database Connection Failed!");
             e.printStackTrace();
         }
-        return connection;
+        
+        return conn;
     }
 }
